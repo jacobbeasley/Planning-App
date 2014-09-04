@@ -6,27 +6,25 @@
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
         <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+        <link href="css/splash.css" rel="stylesheet">
 
         <script src="lib/ionic/js/ionic.bundle.js"></script>
+        <script src="lib/ionic/js/angular-ui/angular-ui-router.min.js"></script>
         <script src="cordova.js"></script>
         <script src="js/app.js"></script>
     </head>
-    <body ng-app="todo">
+    <body ng-app="tripperApp">
       <ion-side-menus>
 
         <!-- Center content -->
-        <ion-side-menu-content>
-          <ion-header-bar class="bar-dark">
-            <h1 class="title">Todo</h1>
-          </ion-header-bar>
-          <ion-content>
-          </ion-content>
+        <ion-side-menu-content ui-view>
+          Loading...
         </ion-side-menu-content>
 
         <!-- Left menu -->
         <ion-side-menu side="left">
           <ion-header-bar class="bar-dark">
-            <h1 class="title">Projects</h1>
+            <h1 class="title">Menu</h1>
           </ion-header-bar>
         </ion-side-menu>
 

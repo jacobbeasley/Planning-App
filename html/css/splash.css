@@ -1,0 +1,34 @@
+.splash-page {
+  background-image: url(../img/splash.jpg);
+  background-size: cover;
+  background-position: center center;
+}
+
+.splash-page h3, .splash-page h4 {
+  color: #FFF;
+  text-shadow: 1px 1px #000;
+}
+
+.splash-page .splashtitle-row {
+  height: 40%;
+}
+
+.splash-page .splashsubtitle-row {
+  height: 30%;
+}
+
+.splash-page .col {
+  text-align: center;
+}
+
+.splash-page {
+  text-align: center;
+}
+
+.splash-page {
+  height: 100%;
+}
+
+.splash-page .scroll {
+  height: 100%;
+}
