@@ -9,12 +9,21 @@
   text-shadow: 1px 1px #000;
 }
 
-.splash-page .splashtitle-row {
+.splash-page .splashtitle-row { 
   height: 40%;
 }
 
 .splash-page .splashsubtitle-row {
-  height: 30%;
+  height: 25%;
+}
+
+.splash-page .splash-getstarted {
+  height: 20%;
+}
+
+.splash-page .splash-login {
+  height: 12%;
+  color: #FFF;
 }
 
 .splash-page .col {
