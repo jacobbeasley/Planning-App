@@ -17,7 +17,7 @@
       <ion-side-menus>
 
         <!-- Center content -->
-        <ion-side-menu-content ui-view class="slide-in-left">
+        <ion-side-menu-content ui-view ng-class="{slide-right-left-ios7: animationEffect == 'slide-right', slide-left-right-ios7: animationEffect == 'slide-left'}">
           Loading...
         </ion-side-menu-content>
 
@@ -30,15 +30,15 @@
             </ion-header-bar>
             <ion-content>
               <!-- buttons in left menu -->
-              <div class="item item-button-right">
+              <a ui-sref="login" class="item item-button-right">
                 Login
-              </div>
-              <div class="item item-button-right">
+              </a>
+              <a ui-sref="signup" class="item item-button-right">
                 Signup
-              </div>
-              <div class="item item-button-right">
+              </a>
+              <a ui-sref="signup-fb" class="item item-button-right">
                 Signup with Facebook
-              </div>
+              </a>
             </ion-content>
           </ion-side-menu-content>
         </ion-side-menu>
