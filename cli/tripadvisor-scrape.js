@@ -5,12 +5,12 @@
 // setup app
 var http = require('http');
 
-// function to get individual page of data
-function getPage(pageNumber, callback) {
+// function to get individual page of data. Will append directly to attractions list. 
+function getPage(pageNumber, scrape, callback) {
 	//The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
 	var options = {
 	    host: 'www.tripadvisor.com',
-	    path: '/AttractionsAjax-g60763?cat=false&o=a' + (pageNumber*30) + '&sortOrder=popularity&mapProviderFeature=ta-maps-gmaps3'
+	    path: '/AttractionsAjax-g' + scrape.city_id + '?cat=' + scrape.category + '&o=a' + (pageNumber*30) + '&sortOrder=popularity&mapProviderFeature=ta-maps-gmaps3'
 	};
 
 	var httpcallback = function(response) {
@@ -26,7 +26,6 @@ function getPage(pageNumber, callback) {
 	    	var regex = /<div class="listing([\s\S]*)<\/div> <\/div> <\/div>/g;
 	    	var attractionshtml = str.match(regex)[0];
 	    	var attractionshtml = attractionshtml.split("<\/div> <\/div> <\/div>");
-	    	var attractions = [];
 
 	    	// loop through all attractions and pull out content for each
 	    	for (var i = 0; i < attractionshtml.length; i++) {
@@ -55,7 +54,18 @@ function getPage(pageNumber, callback) {
 		    				thisattraction.rank = thisattractionhtml.match(/<b class="rank_text">Ranked #(.*?)<\/b>/)[1];
 		    			} catch (err) {}
 		    			
-		    			attractions[attractions.length] = thisattraction; 
+		    			// make sure attraction doesn't exist
+		    			var attraction_already_loaded = false; 
+		    			for (var j = 0; j < attractions.length; j++) {
+		    				if (attractions[i].link == thisattraction.link) {
+		    					attraction_already_loaded = true; 
+		    					break;
+		    				}
+		    			}
+
+		    			if(!attraction_already_loaded) {
+		    				attractions[attractions.length] = thisattraction; 
+		    			}
 		    		} catch (err) {
 		    			// skip it - must have some invalid content
 		    		}
@@ -63,7 +73,7 @@ function getPage(pageNumber, callback) {
 	    	}
 
 	    	// call callback
-	    	callback(attractions, pageNumber);
+	    	callback(pageNumber);
 	    });
 	}
 
@@ -78,14 +88,14 @@ function getPage(pageNumber, callback) {
 var max_concurrent_requests = 5; 
 var concurrent_requests = 0;
 var done_getting_results = false; 
-var maxPages = 29; 
 var attractions = []; // complete list of all attractions
-var pages_loaded = 0; 
 
-function getAllPages(i) {
+function getAllPages(scrape, i) {
 	if (typeof(i) == "undefined") {
 		i = 0; 
 	}
+
+	var maxPages = Math.ceil(scrape.total_results / 30); 
 
 	if (i >= maxPages) {
 		return; // we're done queueing up downloads
@@ -94,25 +104,38 @@ function getAllPages(i) {
 	// spin up a process to perform http request and scrape data, but prevent it from running to many at once
 	while (concurrent_requests < max_concurrent_requests && i < maxPages) {
 		concurrent_requests++;
-		getPage(i, function(this_page_attractions_list, thispageindex) {
-			attractions = attractions.concat(this_page_attractions_list);
+		
+		getPage(i, scrape, function(thispageindex) {
+			// allow another process to get started downloading
 			concurrent_requests--;
-			pages_loaded++;
-			//console.log("got page " + thispageindex);
-			if (pages_loaded >= maxPages) {
-				done_getting_results = true; 
+
+			// if it was the last page, then mark that its done
+			if (thispageindex+1 >= maxPages) {
+				scrape.scraped = true; 
 			}
+			
+			// output that page was loaded (if logging)
+			//console.log("got page " + thispageindex + " of " + scrape.city_id + ":" + scrape.category + "\n");
 		});
 		i++; 
 	} 
 
 	// full - wait 1/10 of a second then try again
 	setTimeout(function() {
-		getAllPages(i);
+		getAllPages(scrape, i);
 	}, 100);
 }
 
+// watch until all results scraped
 function outputAtEndOfAllPages() {
+	var done_getting_results = true; 
+
+	for (var i = 0; i < scrape_list.length; i++) {
+		if (typeof(scrape_list[i].scraped) == "undefined" || !scrape_list[i].scraped) {
+			done_getting_results = false; 
+		}
+	}
+
 	if (done_getting_results) {
 		for (var i = 0; i < attractions.length; i++) {
 			var csv_raw = [
@@ -128,5 +151,31 @@ function outputAtEndOfAllPages() {
 }
 
 // get scraping started...
-getAllPages();
+var scrape_list = [
+	{
+		"city_id": 60763,
+		"category": "false",
+		"total_results": 859
+	},
+	{
+		"city_id": 60763,
+		"category": "20",
+		"total_results": 527
+	},
+	{
+		"city_id": 60763,
+		"category": "25",
+		"total_results": 781
+	},
+	{
+		"city_id": 60763,
+		"category": "26",
+		"total_results": 579
+	}
+];
+
+for (var i = 0; i < scrape_list.length; i++) {
+	getAllPages(scrape_list[i]);
+}
+
 outputAtEndOfAllPages();
