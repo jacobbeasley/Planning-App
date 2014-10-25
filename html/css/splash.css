@@ -74,3 +74,17 @@ a {
   color: #000;
   text-decoration: none;
 }
+
+/* make sure it doesn't get too wide (its not responsive yet) */
+ion-content {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* attractions page */
+
+.attraction-page .title .row, .attraction-page .title .row .col-75, .attraction-page .title .row .col-25 {
+  padding-top: 0px; padding-bottom: 0px;
+}
+

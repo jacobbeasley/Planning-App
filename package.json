@@ -1,9 +1,12 @@
 {
-  "name": "Tripper2",
+  "name": "tripper3",
   "description": "Trip-Planning App",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express": "4.x"
+    "express": "4.x",
+    "sequelize": "2.x",
+    "mysql": "2.x",
+    "body-parser": ""
   }
 }

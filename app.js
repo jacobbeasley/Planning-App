@@ -5,10 +5,9 @@
 // setup app
 var express = require('express');
 var app = express();
+app.use(require("body-parser").json());
 var conf = require("./conf");
-
-// @TODO - MySQL Wrapper Initialization
-
+app.db = require("./db"); 
 
 // setup API
 if (conf.api) {
@@ -28,11 +27,12 @@ if (conf.http) {
 		res.redirect("/html/");
 	});
 
+	// default to index.html if they go to /html/
 	app.get("/html/", function(req, res) {
 		res.sendFile(__dirname + "/html/index.html");
 	})
 
-	// load routes
+	// static files from /html/ as static files
 	app.use('/html/', express.static(__dirname + '/html/'));
 }
 

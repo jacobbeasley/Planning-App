@@ -1,4 +1,4 @@
-<ion-header-bar class="bar bar-positive" align-title="center">
+<ion-header-bar class="bar bar-positive attraction-page" align-title="center">
 	<div class="buttons">
 	    <button class="button ion-arrow-left-c button-light" ui-sref="feed" style="font-size: 22px"></button>
 	</div>
@@ -10,10 +10,10 @@
 			<div class="col-25 right">
 				<span class="ion-heart heart" ng-class="{'heart-selected': attraction.picked}" ng-click="attractionPicked(attraction)">
 					<span ng-show="attraction.picked" class="heart-selected">
-						Liked
+						Picked
 					</span>
 					<span ng-show="!attraction.picked">
-						Like
+						Pick
 					</span>
 				</span>
 			</div>
@@ -26,7 +26,7 @@
 	<div class="card" ng-show="loaded == true || partialLoad == true">
 		<div class="item item-image">
 			<a>
-				<img ng-src="{{attraction.src}}" ui-sref="attraction({attraction_id: attraction.id})" ng-click="resultClicked(result)">
+				<img ng-src="{{attraction.src}}">
 			</a>
 		</div>
 		<div class="item" ng-show="loaded == false">

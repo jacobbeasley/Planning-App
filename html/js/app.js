@@ -2,51 +2,55 @@
 // init app
 var tripperApp = angular.module('tripperApp', ["ui.router", 'ionic']);
 
+//
+// api wrapper service
+tripperApp.factory("api", ["$rootScope", "$http", "session", function($rootScope, $http, session) {
+  var api = {};
+
+  api.get = function(route) {
+    return $http.get("/api/" + route);
+  }
+
+  api.post = function(route, data) {
+    data.sess_user = session.user; 
+    return $http.post("/api/" + route, data);
+  }
+
+  return api;
+}]);
+
 // 
 // feed service: used to get setup filters and then query for a feed using those filters
-tripperApp.factory("feedService", ["$rootScope", function($rootScope) {
+tripperApp.factory("feedService", ["$rootScope", "api", function($rootScope, api) {
   var feedService = {};
 
-  $rootScope.filters = [
-      {
-        "name": "Culture",
-        "id": 0
-      },
-      {
-        "name": "Sightseeing",
-        "id": 1
-      },
-      {
-        "name": "Food & Drinks",
-        "id": 2
-      },
-      {
-        "name": "Performance",
-        "id": 3
-      },
-      {
-        "name": "Shopping",
-        "id": 4
-      },
-      {
-        "name": "Sports",
-        "id": 5
-      },
-      {
-        "name": "Concerts",
-        "id": 6
-      },
-      {
-        "name": "Film",
-        "id": 7
-      },
-      {
-        "name": "Nightlife",
-        "id": 8
-      }
-    ]; 
+  api.get("filters").success(function(data, status, headers, config) {
+    $rootScope.filters = data; 
+  })
+  .error(function(data, status, headers, config) {
+    // @TODO - gracefully handle error
+  });
 
-  feedService.runSearch = function($scope, callback) {
+  feedService.runSearch = function($scope, session, callback) {
+    // add on more results
+    api.post("search", {
+      "start": $scope.currentSpot
+    })
+    .success(function(data, status, headers, config) {
+      // copy results into array
+      for (var i = 0; i < data.length; i++) {
+        $scope.results[$scope.results.length] = data[i]; 
+      }
+
+      // call callback
+      callback(true); // success!
+    })
+    .error(function(data, status, headers, config) {
+      callback(false); // error!
+    });
+  };
+
+  feedService.getWishlist = function($scope, callback) {
     // add on more results
     setTimeout(function() {
       // @TODO - load from ajax call
@@ -76,7 +80,7 @@ tripperApp.factory("feedService", ["$rootScope", function($rootScope) {
 tripperApp.factory("session", function() {
   var sess = {
     user: {
-      filters: [] // default to no filters
+      filters: {} // default to no filters
     }
   };
 
@@ -129,6 +133,11 @@ tripperApp.config(function($stateProvider, $urlRouterProvider) {
       url: "/feed",
       templateUrl: "partials/feed.html",
       controller: "feedCtrl"
+    })
+    .state("wishlist", {
+      url: "/wishlist",
+      templateUrl: "partials/feed.html",
+      controller: "wishlistCtrl"
     })
     .state("attraction", {
       url: "/attraction/:attraction_id",
@@ -183,16 +192,53 @@ tripperApp.controller("menuCtrl", function($scope, $rootScope, $ionicSideMenuDel
 
 // 
 // feed controller
-tripperApp.controller("feedCtrl", function($scope, $rootScope, feedService) {
+tripperApp.controller("feedCtrl", function($scope, $rootScope, session, feedService) {
   $scope.loadingResults = true;
   $scope.feed = {
     results: [],
     currentSpot: 0
   }
+  $scope.wishlist = false; 
 
   $scope.loadResults = function() {
     $scope.loadingResults = true; 
-    feedService.runSearch($scope.feed, function(success) {
+    feedService.runSearch($scope.feed, session, function(success) {
+      $scope.loadingResults = false; 
+      if (!success) {
+        // @TODO - handle error
+      }
+      $scope.$apply();
+    });
+  }
+  $scope.loadResults(); // load initial results on load
+
+  $scope.resultPicked = function(result) {
+    if (result.picked) {
+      result.picked = false; 
+    } else {
+      result.picked = true;
+    }
+  }
+
+  $rootScope.clickedResult = undefined;
+  $scope.resultClicked = function(result) {
+    $rootScope.clickedResult = result; 
+  }
+});
+
+// 
+// wishlist controller
+tripperApp.controller("wishlistCtrl", function($scope, $rootScope, feedService) {
+  $scope.loadingResults = true;
+  $scope.feed = {
+    results: [],
+    currentSpot: 0
+  }
+  $scope.wishlist = true; 
+
+  $scope.loadResults = function() {
+    $scope.loadingResults = true; 
+    feedService.getWishlist($scope.feed, function(success) {
       $scope.loadingResults = false; 
       if (!success) {
         // @TODO - handle error
@@ -239,9 +285,9 @@ tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideM
     }
   }
 
-  // load full attraction
+  // load full attraction - @TODO AJAX CALL
   setTimeout(function() {
-    $scope.attraction = {
+    /*$scope.attraction = {
       "id": 0,
       "src": "http://cdn.designbeep.com/wp-content/uploads/2011/11/12.cityscape-wallpapers.jpg",
       "title": "Tower of London",
@@ -251,7 +297,11 @@ tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideM
       "location": "London EC3N 4AB, United Kingdom",
       "description": "Her Majesty's Royal Palace and Fortress, known as the Tower of London, is a historic castle located on the north bank of the River Thames in central London. It lies within the London Borough of Tower Hamlets, separated from the eastern edge of the square mile of the City of London by the open space known as Tower Hill. It was founded towards the end of 1066 as part of the Norman Conquest of England.",
       "wiki": "http://en.wikipedia.org/wiki/Tower_of_London"
-    };
+    };*/
+    $scope.attraction.stars = 5;
+    $scope.attraction.reviews = 632;
+    $scope.attraction.location = "New York";
+    $scope.attraction.description = "Her Majesty's Royal Palace and Fortress, known as the Tower of London, is a historic castle located on the north bank of the River Thames in central London. It lies within the London Borough of Tower Hamlets, separated from the eastern edge of the square mile of the City of London by the open space known as Tower Hill. It was founded towards the end of 1066 as part of the Norman Conquest of England.";
     $scope.partialLoad = false;
     $scope.loaded = true;
     $scope.$apply();

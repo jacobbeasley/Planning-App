@@ -9,27 +9,12 @@ module.exports = {
 	api: true,
 
 	// mysql settings
-	mysql_servers: {
-		user_data: {
-			mysql_host: "",
-			mysql_port: "",
-			mysql_database: "",
-			mysql_username: "",
-			mysql_password: ""
-		},
-		search_data: {
-			mysql_host: "",
-			mysql_port: "",
-			mysql_database: "",
-			mysql_username: "",
-			mysql_password: ""
-		},
-		search_data_readonly: {
-			mysql_host: "",
-			mysql_port: "",
-			mysql_database: "",
-			mysql_username: "",
-			mysql_password: ""
-		}
+	db: {
+		type: "mysql",
+		database: "main",
+		host: "127.0.0.1",
+		port: "3306",
+		username: "root",
+		password: "password"
 	}
 };
