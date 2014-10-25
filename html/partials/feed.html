@@ -1,0 +1,38 @@
+<ion-header-bar class="bar bar-positive" align-title="center">
+	<div class="buttons">
+	    <button class="button ion-navicon-round button-light" ng-click="toggleLeftMenu(); " style="font-size: 22px"></button>
+	</div>
+	<h1 class="title">New York Attractions</h1>
+</ion-header-bar>
+<ion-content class="padding feed-page">
+	<!-- display results -->
+	<div class="card" ng-repeat="result in feed.results" ng-show="feed.results.length > 0">
+		<div class="item item-image">
+			<a>
+				<img ng-src="{{result.src}}">
+			</a>
+		</div>
+		<div class="item">
+			<div class="row">
+				<div class="col-25">
+					<a ui-sref="attraction({attraction_id: result.id})">{{result.title}}</a>
+				</div>
+				<div class="col-75 right">
+					<span class="ion-heart heart" ng-class="{'heart-selected': result.picked}" ng-click="resultPicked(result)">
+						<span ng-show="result.picked" class="heart-selected">
+							Liked
+						</span>
+						<span ng-show="!result.picked">
+							Like
+						</span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- loading -->
+	<div class="center loading" ng-show="loadingResults == true">
+		<div class="ion-refresh ion-loading-c"></div> Loading...
+	</div>
+</ion-content>

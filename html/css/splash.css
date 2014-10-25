@@ -1,43 +1,69 @@
-.splash-page {
-  background-image: url(../img/splash.jpg);
-  background-size: cover;
-  background-position: center center;
+/* splash page */
+.splash-page .filter-name {
+  vertical-align: middle;
+  line-height: 40px;
+  font-size: 16px;
 }
 
-.splash-page h3, .splash-page h4 {
-  color: #FFF;
-  text-shadow: 1px 1px #000;
+.splash-page .filter, .splash-page .filter .col {
+  padding-top: 0px; 
+  padding-bottom: 2px;
 }
 
-.splash-page .splashtitle-row { 
-  height: 40%;
+/* feed page */
+.feed-page .loading {
+  font-size: 18px;
 }
 
-.splash-page .splashsubtitle-row {
-  height: 25%;
+/* star for splash page */
+.star {
+  color: gray;
+  font-size: 40px;
+  cursor: pointer;
 }
 
-.splash-page .splash-getstarted {
-  height: 20%;
+.star-selected {
+  color: darkorange;
 }
 
-.splash-page .splash-login {
-  height: 12%;
-  color: #FFF;
+/* heart for list page and view page */
+.heart {
+  font-size: 18px;
+  cursor: pointer;
 }
 
-.splash-page .col {
+.heart-selected {
+  color: #FF4073;
+}
+
+/* positioning */
+.center {
   text-align: center;
 }
 
-.splash-page {
-  text-align: center;
+.right {
+  text-align: right;
 }
 
-.splash-page {
-  height: 100%;
+.left {
+  text-align: left;
 }
 
-.splash-page .scroll {
-  height: 100%;
+.middle {
+  vertical-align: middle;
+}
+
+.top {
+  vertical-align: top;
+}
+
+.bottom {
+  vertical-align: bottom;
+}
+
+/* global link styling */
+a {
+  cursor: pointer;
+  color: #000;
+  text-decoration: none;
 }
