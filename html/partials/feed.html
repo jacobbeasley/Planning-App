@@ -9,13 +9,13 @@
 	<div class="card" ng-repeat="result in feed.results" ng-show="feed.results.length > 0">
 		<div class="item item-image">
 			<a>
-				<img ng-src="{{result.src}}">
+				<img ng-src="{{result.src}}" ui-sref="attraction({attraction_id: result.id})" ng-click="resultClicked(result)">
 			</a>
 		</div>
 		<div class="item">
 			<div class="row">
 				<div class="col-25">
-					<a ui-sref="attraction({attraction_id: result.id})">{{result.title}}</a>
+					<a ui-sref="attraction({attraction_id: result.id})" ng-click="resultClicked(result)">{{result.title}}</a>
 				</div>
 				<div class="col-75 right">
 					<span class="ion-heart heart" ng-class="{'heart-selected': result.picked}" ng-click="resultPicked(result)">

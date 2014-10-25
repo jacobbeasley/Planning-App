@@ -209,10 +209,51 @@ tripperApp.controller("feedCtrl", function($scope, $rootScope, feedService) {
       result.picked = true;
     }
   }
+
+  $rootScope.clickedResult = undefined;
+  $scope.resultClicked = function(result) {
+    $rootScope.clickedResult = result; 
+  }
 });
 
 // 
 // attraction controller
 tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideMenuDelegate) {
-  // display a particular attraction
+  // attraction details
+  $scope.attraction = {};
+  $scope.loaded = false; 
+
+  // if partially loaded (from feed) then load that content in
+  $scope.partialLoad = false; 
+  if (typeof($rootScope.clickedResult) != "undefined") {
+    $scope.partialLoad = true; 
+    $scope.attraction = $rootScope.clickedResult;
+  }
+
+  // if liked/unliked
+  $scope.attractionPicked = function(attraction) {
+    if (attraction.picked) {
+      attraction.picked = false; 
+    } else {
+      attraction.picked = true;
+    }
+  }
+
+  // load full attraction
+  setTimeout(function() {
+    $scope.attraction = {
+      "id": 0,
+      "src": "http://cdn.designbeep.com/wp-content/uploads/2011/11/12.cityscape-wallpapers.jpg",
+      "title": "Tower of London",
+      "picked": false,
+      "stars": 5,
+      "reviews": 100,
+      "location": "London EC3N 4AB, United Kingdom",
+      "description": "Her Majesty's Royal Palace and Fortress, known as the Tower of London, is a historic castle located on the north bank of the River Thames in central London. It lies within the London Borough of Tower Hamlets, separated from the eastern edge of the square mile of the City of London by the open space known as Tower Hill. It was founded towards the end of 1066 as part of the Norman Conquest of England.",
+      "wiki": "http://en.wikipedia.org/wiki/Tower_of_London"
+    };
+    $scope.partialLoad = false;
+    $scope.loaded = true;
+    $scope.$apply();
+  }, 500); // @TODO - ajax call
 });

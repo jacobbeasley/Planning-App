@@ -2,14 +2,62 @@
 	<div class="buttons">
 	    <button class="button ion-arrow-left-c button-light" ui-sref="feed" style="font-size: 22px"></button>
 	</div>
-	<h1 class="title">ATTRACTION NAME</h1>
+	<h1 class="title" ng-show="loaded == true || partialLoad == true">
+		<div class="row">
+			<div class="col-75">
+				{{attraction.title}}
+			</div>
+			<div class="col-25 right">
+				<span class="ion-heart heart" ng-class="{'heart-selected': attraction.picked}" ng-click="attractionPicked(attraction)">
+					<span ng-show="attraction.picked" class="heart-selected">
+						Liked
+					</span>
+					<span ng-show="!attraction.picked">
+						Like
+					</span>
+				</span>
+			</div>
+		</div>
+	</h1>
+	<h1 class="title" ng-show="loaded == false && partialLoad == false">Loading...</h1>
 </ion-header-bar>
-<ion-content class="padding feed-page">
-	<!-- display results -->
-	NOT DONE
+<ion-content class="padding attraction-page">
+	<!-- display attraction -->
+	<div class="card" ng-show="loaded == true || partialLoad == true">
+		<div class="item item-image">
+			<a>
+				<img ng-src="{{attraction.src}}" ui-sref="attraction({attraction_id: attraction.id})" ng-click="resultClicked(result)">
+			</a>
+		</div>
+		<div class="item" ng-show="loaded == false">
+			<div class="center loading" ng-show="loadingResults == true">
+				<div class="ion-refresh ion-loading-c"></div> Loading...
+			</div>
+		</div>
+		<div class="item" ng-show="loaded == true">
+			<div class="row">
+				<div class="col-50 left">
+					Reviews 
+					<span class="ion-star star" ng-repeat="star in [1, 2, 3, 4, 5]" ng-class="{'star-selected': attraction.stars>=star}" ng-click="setUserFilter(filter.id, star)"></span> ({{attraction.reviews}})
+				</div>
+			</div>
+		</div>
+		<div class="item item-body" ng-show="loaded == true">
+			<h2>Description</h2>
+			<p>
+				{{attraction.description}} 
+				<a target="_blank" ng-href="{{attraction.wiki}}" ng-show="attraction.wiki <> ''">more</a>
+			</p>
+		</div>
+		<div class="item item-icon-left" ng-show="loaded == true">
+			<h2>Location</h2>
+			<a target="_blank" ng-href="https://www.google.com/maps/dir/''/{{attraction.title}},%20{{attraction.location}}"><i class="icon ion-navigate"></i></a>
+			<a target="_blank" ng-href="https://www.google.com/maps/dir/''/{{attraction.title}},%20{{attraction.location}}">{{attraction.location}}</a>
+		</div>
+	</div>
 
 	<!-- loading -->
-	<div class="center loading" ng-show="loadingResults == true">
+	<div class="center loading" ng-show="loaded == false && partialLoad == false">
 		<div class="ion-refresh ion-loading-c"></div> Loading...
 	</div>
 </ion-content>
