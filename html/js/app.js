@@ -39,8 +39,9 @@ tripperApp.factory("feedService", ["$rootScope", "api", function($rootScope, api
     .success(function(data, status, headers, config) {
       // copy results into array
       for (var i = 0; i < data.length; i++) {
-        $scope.results[$scope.results.length] = data[i]; 
+        $scope.results.push(data[i]);
       }
+      $scope.currentSpot += data.length; 
 
       // call callback
       callback(true); // success!
@@ -192,25 +193,37 @@ tripperApp.controller("menuCtrl", function($scope, $rootScope, $ionicSideMenuDel
 
 // 
 // feed controller
-tripperApp.controller("feedCtrl", function($scope, $rootScope, session, feedService) {
-  $scope.loadingResults = true;
-  $scope.feed = {
-    results: [],
-    currentSpot: 0
-  }
+tripperApp.controller("feedCtrl", function($scope, $rootScope, session, feedService, $ionicScrollDelegate) {
+  // setup feed page (only once)
+  if (typeof($scope.feed) == "undefined") {
+    // first time loading - setup scope
+    $rootScope.feed = {
+      results: [],
+      currentSpot: 0
+    }
+  } 
+
+  // auto scroll down (if appropriate)
+  window.setTimeout(function() {
+    if (typeof($rootScope.feed.lastScrollPosition) != "undefined") {
+      $ionicScrollDelegate.$getByHandle('feedScroll').scrollTo(0, $rootScope.feed.lastScrollPosition, false);
+    }
+  }, 0);
+
+  // tell feed template that this is NOT for a wish
   $scope.wishlist = false; 
 
-  $scope.loadResults = function() {
+  // query and display results
+  $scope.loadResults = function() { 
     $scope.loadingResults = true; 
     feedService.runSearch($scope.feed, session, function(success) {
-      $scope.loadingResults = false; 
-      if (!success) {
+      if (!success) { 
         // @TODO - handle error
+
       }
-      $scope.$apply();
+      $scope.$broadcast('scroll.infiniteScrollComplete');
     });
   }
-  $scope.loadResults(); // load initial results on load
 
   $scope.resultPicked = function(result) {
     if (result.picked) {
@@ -223,6 +236,8 @@ tripperApp.controller("feedCtrl", function($scope, $rootScope, session, feedServ
   $rootScope.clickedResult = undefined;
   $scope.resultClicked = function(result) {
     $rootScope.clickedResult = result; 
+    $rootScope.feed.lastScrollPosition = 
+      $ionicScrollDelegate.$getByHandle('feedScroll').getScrollPosition().top;
   }
 });
 

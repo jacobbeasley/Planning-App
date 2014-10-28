@@ -10,13 +10,13 @@
 
         <script src="lib/ionic/js/ionic.bundle.js"></script>
         <script src="lib/ionic/js/angular-ui/angular-ui-router.min.js"></script>
-        <script src="cordova.js"></script>
+        <!-- <script src="cordova.js"></script> -->
         <script src="js/app.js"></script>
     </head>
     <body ng-app="tripperApp">
       <ion-side-menus>
         <!-- Center content -->
-        <ion-side-menu-content ui-view ng-class="{slide-right-left-ios7: animationEffect == 'slide-right', slide-left-right-ios7: animationEffect == 'slide-left'}">
+        <ion-side-menu-content ion-nav-view ui-view ng-class="{'slide-right-left-ios7': animationEffect == 'slide-right', 'slide-left-right-ios7': animationEffect == 'slide-left'}">
           Loading...
         </ion-side-menu-content>
 
