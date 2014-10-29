@@ -59,8 +59,44 @@ module.exports = {
  	 	});
 
  	 	// get single attraction's info
- 	 	//app.get("/api/attraction/:attraction_id", function (req, res) {
+ 	 	app.get("/api/attraction/:attraction_id", function (req, res) {
+            // get attraction's info
+            try {
+                var sql = "SELECT * FROM attraction WHERE attraction.id=:attraction_id";
+                app.db.q(sql, {
+                    attraction_id: req.params.attraction_id
+                }).success(function(results) {
+                    try {
+                        if (results.length > 0) {
+                            var attraction = results[0];
 
-        //}
+                            // get attraction's pictures
+                            var sql = "SELECT src FROM attraction_picture WHERE attraction_id=:attraction_id";
+                            app.db.q(sql, {
+                                attraction_id: req.params.attraction_id
+                            }).success(function(results) {
+                                // assemble results and return them
+                                var pictures = [];
+                                for (var i = 0; i < results.length; i++) {
+                                    pictures.push(results[i].src);
+                                }
+                                attraction.pictures = pictures;
+                                res.json(attraction);
+                            });
+                        } else {
+                            res.json({});
+                        }
+                    } catch (err) {
+                        console.log("error getting attraction " + attraction_id);
+                        console.log(err);
+                        res.json({});
+                    }
+                });
+            } catch (err) {
+                console.log("error getting attraction " + attraction_id);
+                console.log(err);
+                res.json({});
+            }
+        });
 	}
 };

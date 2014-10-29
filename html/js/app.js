@@ -279,7 +279,7 @@ tripperApp.controller("wishlistCtrl", function($scope, $rootScope, feedService) 
 
 // 
 // attraction controller
-tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideMenuDelegate) {
+tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideMenuDelegate, $stateParams, api, $ionicSlideBoxDelegate) {
   // attraction details
   $scope.attraction = {};
   $scope.loaded = false; 
@@ -289,6 +289,11 @@ tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideM
   if (typeof($rootScope.clickedResult) != "undefined") {
     $scope.partialLoad = true; 
     $scope.attraction = $rootScope.clickedResult;
+    if ($rootScope.clickedResult.src != "") {
+      $scope.attraction.pictures = [
+        $rootScope.clickedResult.src
+      ];
+    }
   }
 
   // if liked/unliked
@@ -298,27 +303,23 @@ tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideM
     } else {
       attraction.picked = true;
     }
-  }
+  };
 
   // load full attraction - @TODO AJAX CALL
-  setTimeout(function() {
-    /*$scope.attraction = {
-      "id": 0,
-      "src": "http://cdn.designbeep.com/wp-content/uploads/2011/11/12.cityscape-wallpapers.jpg",
-      "title": "Tower of London",
-      "picked": false,
-      "stars": 5,
-      "reviews": 100,
-      "location": "London EC3N 4AB, United Kingdom",
-      "description": "Her Majesty's Royal Palace and Fortress, known as the Tower of London, is a historic castle located on the north bank of the River Thames in central London. It lies within the London Borough of Tower Hamlets, separated from the eastern edge of the square mile of the City of London by the open space known as Tower Hill. It was founded towards the end of 1066 as part of the Norman Conquest of England.",
-      "wiki": "http://en.wikipedia.org/wiki/Tower_of_London"
-    };*/
-    $scope.attraction.stars = 5;
-    $scope.attraction.reviews = 632;
-    $scope.attraction.location = "New York";
-    $scope.attraction.description = "Her Majesty's Royal Palace and Fortress, known as the Tower of London, is a historic castle located on the north bank of the River Thames in central London. It lies within the London Borough of Tower Hamlets, separated from the eastern edge of the square mile of the City of London by the open space known as Tower Hill. It was founded towards the end of 1066 as part of the Norman Conquest of England.";
-    $scope.partialLoad = false;
-    $scope.loaded = true;
-    $scope.$apply();
-  }, 500); // @TODO - ajax call
+  $scope.loadAttraction = function(attraction_id) {
+    api.get("attraction/" + attraction_id).success(function(data, status, headers, config) {
+      // success! 
+      $scope.attraction = data; 
+      $scope.partialLoad = false;
+      $scope.loaded = true;
+
+      $ionicSlideBoxDelegate.$getByHandle("attractionCtrlDelegate").update();
+      //$scope.$apply(); 
+    })
+    .error(function(data, status, headers, config) {
+      // @TODO - handle error!
+
+    });
+  };
+  $scope.loadAttraction($stateParams.attraction_id);
 });

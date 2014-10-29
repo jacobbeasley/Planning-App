@@ -25,10 +25,15 @@
 	<ion-content class="padding attraction-page">
 		<!-- display attraction -->
 		<div class="card" ng-show="loaded == true || partialLoad == true">
-			<div class="item item-image">
-				<a>
-					<img ng-src="{{attraction.src}}">
-				</a>
+			<div class="item item-image" ng-show="attraction.pictures.length > 0">
+				<!-- slide for pictures -->
+				<ion-slide-box does-continue="true" show-pager="true" auto-play="true" slide-interval="4000" delegate-handle="attractionCtrlDelega4e">
+				    <ion-slide ng-repeat = "picture in attraction.pictures">
+				        <a class="box">
+							<img ng-src="{{picture}}">
+						</a>
+				    </ion-slide>
+				</ion-slide-box>
 			</div>
 			<div class="item" ng-show="loaded == false">
 				<div class="center loading" ng-show="loadingResults == true">
@@ -43,7 +48,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="item item-body" ng-show="loaded == true">
+			<div class="item item-body" ng-show="loaded == true && attraction.description != ''">
 				<h2>Description</h2>
 				<p>
 					{{attraction.description}} 
