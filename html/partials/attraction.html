@@ -27,7 +27,7 @@
 		<div class="card" ng-show="loaded == true || partialLoad == true">
 			<div class="item item-image" ng-show="attraction.pictures.length > 0">
 				<!-- slide for pictures -->
-				<ion-slide-box does-continue="true" show-pager="true" auto-play="true" slide-interval="4000" delegate-handle="attractionCtrlDelega4e">
+				<ion-slide-box does-continue="true" show-pager="true" auto-play="true" slide-interval="4000" delegate-handle="attractionCtrlDelegate">
 				    <ion-slide ng-repeat = "picture in attraction.pictures">
 				        <a class="box">
 							<img ng-src="{{picture}}">
