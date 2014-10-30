@@ -17,15 +17,15 @@
 				</div>
 				<div class="item">
 					<div class="row">
-						<div class="col-25">
+						<div class="col-75 col-wrap">
 							<a ui-sref="attraction({attraction_id: result.id})" ng-click="resultClicked(result)">{{result.title}}</a>
 						</div>
-						<div class="col-75 right">
+						<div class="col-25 right col-wrap">
 							<span class="ion-heart heart" ng-class="{'heart-selected': result.picked}" ng-click="resultPicked(result)">
-								<span ng-show="result.picked" class="heart-selected">
+								<span ng-show="attractionIsPicked(result.id)" class="heart-selected">
 									Picked
 								</span>
-								<span ng-show="!result.picked">
+								<span ng-show="!attractionIsPicked(result.id)">
 									Pick
 								</span>
 							</span>

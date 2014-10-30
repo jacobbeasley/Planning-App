@@ -68,6 +68,10 @@
   vertical-align: bottom;
 }
 
+.col-wrap {
+  white-space: normal;
+}
+
 /* global link styling */
 a {
   cursor: pointer;
@@ -77,7 +81,7 @@ a {
 
 /* make sure it doesn't get too wide (its not responsive yet) */
 ion-content {
-  max-width: 600px;
+  max-width: 980px;
   margin-left: auto;
   margin-right: auto;
 }

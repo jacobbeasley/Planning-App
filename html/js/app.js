@@ -1,6 +1,6 @@
 // 
 // init app
-var tripperApp = angular.module('tripperApp', ["ui.router", 'ionic']);
+var tripperApp = angular.module('tripperApp', ["ui.router", 'ionic', 'LocalStorageModule']);
 
 //
 // api wrapper service
@@ -78,16 +78,19 @@ tripperApp.factory("feedService", ["$rootScope", "api", function($rootScope, api
 
 // 
 // session service
-tripperApp.factory("session", function() {
+tripperApp.factory("session", function(localStorageService) {
   var sess = {
     user: {
-      filters: {} // default to no filters
-    }
+      filters: {}, // default to no filters
+    }, 
+    picks: []
   };
 
   sess.load = function() {
     // load from local storage
-
+    if (localStorageService.get("user") != null) {
+      sess.user = localStorageService.get("user");
+    }
 
     // @TODO - sync over internet
 
@@ -95,13 +98,32 @@ tripperApp.factory("session", function() {
 
   sess.save = function() {
     // save to local storage
-
+    localStorageService.set("user", sess.user);
 
     // @TODO - sync over internet
 
+  };
+
+  sess.pickPlace = function(attraction_id) {
+    if (sess.picks.indexOf(attraction_id) == -1) {
+      sess.picks.unshift(attraction_id);
+    }
+
+    sess.save();
   }
 
-  // load it from local storage
+  sess.unpickPlace = function(attraction_id) {
+    if (sess.picks.indexOf(attraction_id) != -1) {
+      sess.picks.splice(sess.picks.indexOf(attraction_id), 1);
+    }
+
+    sess.save();
+  }
+
+  // setup local storage
+  //localStorageService.
+
+  // load it from local storage when app boots up
   sess.load(); 
 
   return sess;
@@ -167,6 +189,17 @@ tripperApp.controller('splashCtrl', function($scope, $rootScope, $ionicSideMenuD
     for (var i = 0; i < $rootScope.filters; i++) {
       $scope.setUserFilter($rootScope.filters[i].id, $scope.getUserFilter($rootScope.filters[i].id)); 
     }
+
+    // save session
+    session.save(); 
+  }
+
+  // clear attraction list
+  $scope.clearAttractions = function() {
+    $rootScope.feed = {
+      results: [],
+      currentSpot: 0
+    }
   }
 });
 
@@ -225,11 +258,20 @@ tripperApp.controller("feedCtrl", function($scope, $rootScope, session, feedServ
     });
   }
 
+  // whether an attraction is picked
+  $scope.attractionIsPicked = function(attraction_id) {
+    return session.picks.indexOf(attraction_id) != -1;
+  };
+
+  // when a result is picked/unpicked
   $scope.resultPicked = function(result) {
-    if (result.picked) {
-      result.picked = false; 
+    var attraction_id = result.id;
+    if (session.picks.indexOf(attraction_id) == -1) {
+      // not yet picked, so lets pick it
+      session.pickPlace(attraction_id);
     } else {
-      result.picked = true;
+      // its picked, so lets unpick it
+      session.unpickPlace(attraction_id);
     }
   }
 
@@ -263,11 +305,18 @@ tripperApp.controller("wishlistCtrl", function($scope, $rootScope, feedService) 
   }
   $scope.loadResults(); // load initial results on load
 
+  $scope.attractionIsPicked = function(attraction_id) {
+    return session.picks.indexOf(attraction_id) != -1;
+  };
+
   $scope.resultPicked = function(result) {
-    if (result.picked) {
-      result.picked = false; 
+    var attraction_id = result.id;
+    if (session.picks.indexOf(attraction_id) == -1) {
+      // not yet picked, so lets pick it
+      session.pickPlace(attraction_id);
     } else {
-      result.picked = true;
+      // its picked, so lets unpick it
+      session.unpickPlace(attraction_id);
     }
   }
 
@@ -279,7 +328,7 @@ tripperApp.controller("wishlistCtrl", function($scope, $rootScope, feedService) 
 
 // 
 // attraction controller
-tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideMenuDelegate, $stateParams, api, $ionicSlideBoxDelegate) {
+tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideMenuDelegate, $stateParams, api, session, $ionicSlideBoxDelegate) {
   // attraction details
   $scope.attraction = {};
   $scope.loaded = false; 
@@ -298,11 +347,19 @@ tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideM
 
   // if liked/unliked
   $scope.attractionPicked = function(attraction) {
-    if (attraction.picked) {
-      attraction.picked = false; 
+    var attraction_id = attraction.id;
+    if (session.picks.indexOf(attraction_id) == -1) {
+      // not yet picked, so lets pick it
+      session.pickPlace(attraction_id);
     } else {
-      attraction.picked = true;
+      // its picked, so lets unpick it
+      session.unpickPlace(attraction_id);
     }
+  };
+
+  // figure out whether an attraction is picked
+  $scope.attractionIsPicked = function(attraction_id) {
+    return session.picks.indexOf(attraction_id) != -1;
   };
 
   // load full attraction - @TODO AJAX CALL
@@ -314,7 +371,6 @@ tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideM
       $scope.loaded = true;
 
       $ionicSlideBoxDelegate.$getByHandle("attractionCtrlDelegate").update();
-      //$scope.$apply(); 
     })
     .error(function(data, status, headers, config) {
       // @TODO - handle error!

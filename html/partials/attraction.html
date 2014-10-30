@@ -5,15 +5,15 @@
 		</div>
 		<h1 class="title" ng-show="loaded == true || partialLoad == true">
 			<div class="row">
-				<div class="col-75">
+				<div class="col-75 col-wrap">
 					{{attraction.title}}
 				</div>
 				<div class="col-25 right">
 					<span class="ion-heart heart" ng-class="{'heart-selected': attraction.picked}" ng-click="attractionPicked(attraction)">
-						<span ng-show="attraction.picked" class="heart-selected">
+						<span ng-show="attractionIsPicked(attraction.id)" class="heart-selected">
 							Picked
 						</span>
-						<span ng-show="!attraction.picked">
+						<span ng-show="!attractionIsPicked(attraction.id)">
 							Pick
 						</span>
 					</span>
@@ -29,7 +29,7 @@
 				<!-- slide for pictures -->
 				<ion-slide-box does-continue="true" show-pager="true" auto-play="true" slide-interval="4000" delegate-handle="attractionCtrlDelegate">
 				    <ion-slide ng-repeat = "picture in attraction.pictures">
-				        <a class="box">
+				        <a class="box" target="_blank" ng-href="{{picture}}">
 							<img ng-src="{{picture}}">
 						</a>
 				    </ion-slide>
