@@ -22,7 +22,6 @@ tripperApp.controller("feedCtrl", function($scope, $rootScope, session, feedServ
 
   // query and display results
   $scope.loadResults = function() { 
-    $scope.loadingResults = true; 
     feedService.runSearch($rootScope.feed, session, function(success) {
       if (!success) { 
         // @TODO - handle error

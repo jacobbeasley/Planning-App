@@ -9,7 +9,7 @@ tripperApp.controller("wishlistCtrl", function($scope, $rootScope, session, feed
       currentSpot: 0
     }
   } 
-  $scope.resultsLoaded = false; 
+  $rootScope.resultsLoaded = false; 
 
   // auto scroll down (if appropriate)
   window.setTimeout(function() {
@@ -23,18 +23,14 @@ tripperApp.controller("wishlistCtrl", function($scope, $rootScope, session, feed
 
   // query and display results
   $scope.loadResults = function() { 
-    $rootScope.loadingResults = true; 
-    if (!$scope.resultsLoaded) {
-      feedService.getWishlist($rootScope.feed, session, function(success) {
-        if (!success) { 
-          // @TODO - handle error
+    feedService.getWishlist($rootScope.feed, session, function(success) {
+      if (!success) { 
+        // @TODO - handle error
 
-        }
-        $scope.resultsLoaded = true; 
-        $rootScope.loadingResults = false;
-        $scope.$broadcast('scroll.infiniteScrollComplete');
-      });
-    }
+      }
+      $rootScope.resultsLoaded = true; 
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
   }
 
   // whether an attraction is picked
