@@ -1,7 +1,7 @@
 <ion-view>
 	<ion-header-bar class="bar bar-positive attraction-page" align-title="center">
 		<div class="buttons">
-		    <button class="button ion-arrow-left-c button-light" ui-sref="feed" style="font-size: 22px"></button>
+		    <button ion-nav-back-button class="button ion-arrow-left-c button-light" style="font-size: 22px" ng-click="goBack()"></button>
 		</div>
 		<h1 class="title" ng-show="loaded == true || partialLoad == true">
 			<div class="row">

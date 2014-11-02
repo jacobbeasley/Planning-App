@@ -2,17 +2,97 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Todo</title>
+        <title>NY Travel Guide</title>
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
-        <link href="lib/ionic/css/ionic.css?v=2" rel="stylesheet">
-        <link href="css/splash.css?v=2" rel="stylesheet">
+        <script>
+          var includes = [
+            // CSS
+            {
+              "type": "css",
+              "url": "lib/ionic/css/ionic.css"
+            },
+            {
+              "type": "css",
+              "url": "css/splash.css"
+            },
 
-        <script src="lib/ionic/js/ionic.bundle.js"></script>
-        <script src="lib/ionic/js/angular-ui/angular-ui-router.min.js"></script>
-        <script src="lib/angular-local-storage.js"></script>
-        <!-- <script src="cordova.js"></script> -->
-        <script src="js/app.js?v=2"></script>
+            // JS LIBRARIES
+            {
+              "type": "js",
+              "url": "lib/ionic/js/ionic.bundle.js"
+            },
+            {
+              "type": "js",
+              "url": "lib/ionic/js/angular-ui/angular-ui-router.min.js"
+            },
+            {
+              "type": "js",
+              "url": "lib/angular-local-storage.js"
+            },
+
+            // app and router
+            {
+              "type": "js",
+              "url": "js/app.js"
+            },
+
+            // services
+            {
+              "type": "js",
+              "url": "js/services/api.js"
+            },
+            {
+              "type": "js",
+              "url": "js/services/session.js"
+            },
+            {
+              "type": "js",
+              "url": "js/services/feed.js"
+            },
+            
+
+            // controllers
+            {
+              "type": "js",
+              "url": "js/controllers/splash.js"
+            },
+            {
+              "type": "js",
+              "url": "js/controllers/attraction.js"
+            },
+            {
+              "type": "js",
+              "url": "js/controllers/feed.js"
+            },
+            {
+              "type": "js",
+              "url": "js/controllers/login.js"
+            },
+            {
+              "type": "js",
+              "url": "js/controllers/menu.js"
+            },
+            {
+              "type": "js",
+              "url": "js/controllers/signup.js"
+            },
+            {
+              "type": "js",
+              "url": "js/controllers/wishlist.js"
+            }
+
+          ];
+
+          // generate includes
+          includes.forEach(function(include) {
+            if (include.type == "css") {
+              document.write("<link rel='stylesheet' type='text/css' href='" + include.url + "'>");
+            } else if (include.type == "js") {
+              document.write("<script src='" + include.url + "'></scri" + "pt>");
+            }
+          });
+        </script>
     </head>
     <body ng-app="tripperApp">
       <ion-side-menus>
@@ -41,10 +121,10 @@
             <a ui-sref="splash" class="item item-button-right" ng-click="toggleLeftMenu()">
               Setup Taste Profile
             </a>
-            <a ui-sref="wishlist" class="item item-button-right" ng-click="toggleLeftMenu()">
+            <a ui-sref="wishlist" class="item item-button-right" ng-click="clearAttractions(); toggleLeftMenu();">
               Picked Attractions
             </a>
-            <a ui-sref="feed" class="item item-button-right" ng-click="toggleLeftMenu()">
+            <a ui-sref="feed" class="item item-button-right" ng-click="clearAttractions(); toggleLeftMenu();">
               Attractions
             </a>
           </ion-content>

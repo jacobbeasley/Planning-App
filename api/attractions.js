@@ -5,7 +5,7 @@ module.exports = {
 		app.post("/api/search", function (req, res) {
  	 	 	// generate search sql
  	 	 	try {
- 	 	 	 	var sql_tables = "select attraction.id, title, src, 0 as picked from attraction LEFT JOIN attraction_picture ON attraction_picture.attraction_id = attraction.id";
+ 	 	 	 	var sql_tables = "select attraction.id, title, src from attraction LEFT JOIN attraction_picture ON attraction_picture.attraction_id = attraction.id";
  	 	 	 	var sql_group_by = " group by attraction.id";
  	 	 	 	var sql_order_by = " ORDER BY ";
  	 	 	 	var params = {};
@@ -96,6 +96,38 @@ module.exports = {
                 console.log("error getting attraction " + attraction_id);
                 console.log(err);
                 res.json({});
+            }
+        });
+
+        // get all items from wishlist
+        app.post("/api/wishlist", function(req, res) {
+            // generate search sql
+            try {
+                console.log(typeof(req.body.attraction_ids)); 
+                if (typeof(req.body.attraction_ids) == "object") {
+                    if (req.body.attraction_ids.length == 0) {
+                        res.json([]);
+                        return; // no results - skip query
+                    }
+
+                    var sql = "select attraction.id, title, src from attraction LEFT JOIN attraction_picture ON attraction_picture.attraction_id = attraction.id WHERE attraction.id IN (:attraction_ids) group by attraction.id";
+                    
+                    var params = {
+                        attraction_ids: req.body.attraction_ids
+                    };
+
+                    app.db.q(sql, params)
+                    .success(function(result) {
+                        res.json(result);
+                    });
+                } else {
+                    console.log("no attraction ids given");
+                    res.json([]);
+                }
+            } catch (err) {
+                console.log("error getting wish list");
+                console.log(err);
+                res.json([]);
             }
         });
 	}
