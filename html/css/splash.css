@@ -43,6 +43,10 @@
   margin-bottom: 10px;
 }
 
+.feed-page .item-bottom-sect {
+  padding: 2px;
+}
+
 /* heart for list page and view page */
 .heart {
   font-size: 18px;
