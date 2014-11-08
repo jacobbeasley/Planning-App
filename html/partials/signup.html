@@ -1,16 +1,25 @@
-<ion-header-bar class="bar-dark" align-title="center">
-	<div class="buttons">
-	    <a ui-sref="splash" class="button ion-ios7-arrow-back button-light" style="font-size: 22px">&nbsp;back</a>
-	</div>
-    <h1 class="title">Signup</h1>
-</ion-header-bar>
-<ion-content class="signup-page">
-	
-	<div class="row splashtitle-row">
-		<div class="col col-center">
-			<h3>Signup</h3>	
+<ion-view>
+	<ion-header-bar class="bar bar-positive" align-title="center">
+		<div class="buttons">
+		    <button class="button ion-navicon-round button-light" ng-click="toggleLeftMenu(); " style="font-size: 22px"></button>
 		</div>
-	</div>
-
-	
-</ion-content>
+		<h1 class="title">Signup</h1>
+	</ion-header-bar>
+	<ion-content class="padding signup-page">
+		<div class="list">
+		    <label class="item item-input">
+		        <input type="text" placeholder="First Name" ng-model="form.firstname">
+		    </label>
+		    <label class="item item-input">
+		        <input type="text" placeholder="Last Name" ng-model="form.lastname">
+		    </label>
+		    <label class="item item-input">
+		        <input type="text" placeholder="Email" ng-model="form.email">
+		    </label>
+		    <button class="button button-block button-positive" ng-click="createAccount()">Create Account</button>
+		    <div class="center">
+		   		Already have an account? <a ui-sref="login">login</a>
+		    </div>
+		</div>
+	</ion-content>
+</ion-view>

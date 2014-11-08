@@ -5,6 +5,8 @@
 // setup app
 var express = require('express');
 var app = express();
+app.lib = {}; 
+
 app.use(require("body-parser").json());
 var conf = require("./conf");
 app.db = require("./db"); 

@@ -10,11 +10,6 @@
   padding-bottom: 0px;
 }
 
-/* feed page */
-.feed-page .loading {
-  font-size: 18px;
-}
-
 /* star for splash page */
 .star {
   color: gray;
@@ -31,6 +26,11 @@
 
 .star-selected {
   color: darkorange;
+}
+
+/* feed page */
+.feed-page .loading {
+  font-size: 18px;
 }
 
 /* heart for list page and view page */
@@ -75,13 +75,13 @@
 /* global link styling */
 a {
   cursor: pointer;
-  color: #000;
+  color: #00A;
   text-decoration: none;
 }
 
 /* make sure it doesn't get too wide (its not responsive yet) */
 ion-content {
-  max-width: 980px;
+  max-width: 640px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -90,3 +90,4 @@ ion-content {
 .attraction-page .title .row, .attraction-page .title .row .col-75, .attraction-page .title .row .col-25 {
   padding-top: 0px; padding-bottom: 0px;
 }
+

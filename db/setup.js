@@ -47,7 +47,10 @@ var setup_queries = [
 		"ALTER TABLE `main`.`attraction_picture` ADD INDEX `attraction_id` (`attraction_id` ASC);",
 		"ALTER TABLE `main`.`attraction_filter` ADD INDEX (`attraction_id` ASC, `filter_id` ASC);",
 		"ALTER TABLE `main`.`user_filter` ADD UNIQUE INDEX `user_filter` (`user_id` ASC, `filter_id` ASC);",
-		"ALTER TABLE `main`.`wishlist` ADD UNIQUE INDEX `user_attraction` (`user_id` ASC, `attraction_id` ASC);"
+		"ALTER TABLE `main`.`wishlist` ADD UNIQUE INDEX `user_attraction` (`user_id` ASC, `attraction_id` ASC);",
+		"ALTER TABLE `main`.`user` 
+			ADD COLUMN `firstname` VARCHAR(45) NULL AFTER `email_verified`,
+			ADD COLUMN `lastname` VARCHAR(45) NULL AFTER `firstname`;"
 ];
 
 var current_index = 0;

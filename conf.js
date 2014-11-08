@@ -16,5 +16,8 @@ module.exports = {
 		port: "3306",
 		username: "root",
 		password: "password"
-	}
+	},
+
+	// salt (used for hashing passwords and such)
+	salt: "3094sjdlkr23j4rsdflkj4tpijghsljkhjsd"
 };

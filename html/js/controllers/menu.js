@@ -1,6 +1,6 @@
 // 
 // menu controller
-tripperApp.controller("menuCtrl", function($scope, $rootScope, $ionicSideMenuDelegate, $state) {
+tripperApp.controller("menuCtrl", function($scope, $rootScope, $ionicSideMenuDelegate, $state, session) {
   // setup left menu
   $rootScope.toggleLeftMenu = function() {
     $ionicSideMenuDelegate.toggleLeft();
@@ -30,4 +30,14 @@ tripperApp.controller("menuCtrl", function($scope, $rootScope, $ionicSideMenuDel
       $state.go("feed");
     } 
   };
+
+  // figure out if logged in
+  $scope.notLoggedIn = function() {
+    return !session.loggedIn();
+  };
+
+  // logout
+  $scope.logout = function() {
+    session.logout();
+  }
 });

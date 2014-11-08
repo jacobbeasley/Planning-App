@@ -1,135 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>NY Travel Guide</title>
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <head>
+    <meta charset="utf-8">
+    <title>NY Travel Guide</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
-        <script>
-          var includes = [
-            // CSS
-            {
-              "type": "css",
-              "url": "lib/ionic/css/ionic.css"
-            },
-            {
-              "type": "css",
-              "url": "css/splash.css"
-            },
+    <script src="js/includes.js"></script>
+  </head>
+  <body ng-app="tripperApp">
+    <ion-side-menus>
+      <!-- Center content -->
+      <ion-side-menu-content ion-nav-view ui-view ng-class="{'slide-right-left-ios7': animationEffect == 'slide-right', 'slide-left-right-ios7': animationEffect == 'slide-left'}">
+        Loading...
+      </ion-side-menu-content>
 
-            // JS LIBRARIES
-            {
-              "type": "js",
-              "url": "lib/ionic/js/ionic.bundle.js"
-            },
-            {
-              "type": "js",
-              "url": "lib/ionic/js/angular-ui/angular-ui-router.min.js"
-            },
-            {
-              "type": "js",
-              "url": "lib/angular-local-storage.js"
-            },
+      <!-- Left menu -->
+      <ion-side-menu side="left" ng-controller="menuCtrl">
+        <!-- menu header -->
+        <ion-header-bar class="bar-positive">
+          <h1 class="title">Menu</h1>
+        </ion-header-bar>
+        <ion-content>
+          <!-- buttons in left menu -->
+          <a ui-sref="splash" class="item item-button-right" ng-click="toggleLeftMenu()">
+            Setup Taste Profile
+          </a>
+          <a class="item item-button-right" ng-click="goPicked(); toggleLeftMenu();">
+            Picked Attractions
+          </a>
+          <a class="item item-button-right" ng-click="goFeed(); toggleLeftMenu();">
+            Attractions
+          </a>
+          <a ui-sref="login" class="item item-button-right" ng-show="notLoggedIn()" ng-click="toggleLeftMenu()">
+            Login
+          </a>
+          <a ui-sref="signup" class="item item-button-right" ng-show="notLoggedIn()" ng-click="toggleLeftMenu()">
+            Signup
+          </a>
+          <a class="item item-button-right" ng-show="!notLoggedIn()" ng-click="logout(); toggleLeftMenu()">
+            Logout
+          </a>
+        </ion-content>
+      </ion-side-menu>
 
-            // app and router
-            {
-              "type": "js",
-              "url": "js/app.js"
-            },
-
-            // services
-            {
-              "type": "js",
-              "url": "js/services/api.js"
-            },
-            {
-              "type": "js",
-              "url": "js/services/session.js"
-            },
-            {
-              "type": "js",
-              "url": "js/services/feed.js"
-            },
-            
-
-            // controllers
-            {
-              "type": "js",
-              "url": "js/controllers/splash.js"
-            },
-            {
-              "type": "js",
-              "url": "js/controllers/attraction.js"
-            },
-            {
-              "type": "js",
-              "url": "js/controllers/feed.js"
-            },
-            {
-              "type": "js",
-              "url": "js/controllers/login.js"
-            },
-            {
-              "type": "js",
-              "url": "js/controllers/menu.js"
-            },
-            {
-              "type": "js",
-              "url": "js/controllers/signup.js"
-            },
-            {
-              "type": "js",
-              "url": "js/controllers/wishlist.js"
-            }
-
-          ];
-
-          // generate includes
-          includes.forEach(function(include) {
-            if (include.type == "css") {
-              document.write("<link rel='stylesheet' type='text/css' href='" + include.url + "'>");
-            } else if (include.type == "js") {
-              document.write("<script src='" + include.url + "'></scri" + "pt>");
-            }
-          });
-        </script>
-    </head>
-    <body ng-app="tripperApp">
-      <ion-side-menus>
-        <!-- Center content -->
-        <ion-side-menu-content ion-nav-view ui-view ng-class="{'slide-right-left-ios7': animationEffect == 'slide-right', 'slide-left-right-ios7': animationEffect == 'slide-left'}">
-          Loading...
-        </ion-side-menu-content>
-
-        <!-- Left menu -->
-        <ion-side-menu side="left" ng-controller="menuCtrl">
-          <!-- menu header -->
-          <ion-header-bar class="bar-positive">
-            <h1 class="title">Menu</h1>
-          </ion-header-bar>
-          <ion-content>
-            <!-- buttons in left menu -->
-            <!--<a ui-sref="login" class="item item-button-right">
-              Login
-            </a>
-            <a ui-sref="signup" class="item item-button-right">
-              Signup
-            </a>
-            <a ui-sref="signup-fb" class="item item-button-right">
-              Signup with Facebook
-            </a>-->
-            <a ui-sref="splash" class="item item-button-right" ng-click="toggleLeftMenu()">
-              Setup Taste Profile
-            </a>
-            <a class="item item-button-right" ng-click="goPicked(); toggleLeftMenu();">
-              Picked Attractions
-            </a>
-            <a class="item item-button-right" ng-click="goFeed(); toggleLeftMenu();">
-              Attractions
-            </a>
-          </ion-content>
-        </ion-side-menu>
-
-      </ion-side-menus>
-    </body>
+    </ion-side-menus>
+  </body>
 </html>

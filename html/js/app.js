@@ -25,6 +25,11 @@ tripperApp.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: "partials/signup.html",
       controller: "signupCtrl"
     })
+    .state("reset-password", {
+      url: "/reset-password",
+      templateUrl: "partials/reset-password.html",
+      controller: "signupCtrl" // @TODO
+    })
     .state("feed", {
       url: "/feed",
       templateUrl: "partials/feed.html",
