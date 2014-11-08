@@ -33,6 +33,16 @@
   font-size: 18px;
 }
 
+.feed-page .item-title {
+  color: #000;
+  font-size: 14px;
+}
+
+.feed-page .card {
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
 /* heart for list page and view page */
 .heart {
   font-size: 18px;
@@ -81,7 +91,6 @@ a {
 
 /* make sure it doesn't get too wide (its not responsive yet) */
 ion-content {
-  max-width: 640px;
   margin-left: auto;
   margin-right: auto;
 }

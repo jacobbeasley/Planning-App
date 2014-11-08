@@ -8,27 +8,27 @@
 	</ion-header-bar>
 	<ion-content class="padding feed-page" delegate-handle="feedScroll">
 		<ion-list>
-			<!-- display results -->
-			<div class="card" ng-repeat="result in feed.results" ng-show="feed.results.length > 0">
-				<div class="item item-image">
-					<a>
-						<img ng-src="{{result.src}}" ui-sref="attraction({attraction_id: result.id})" ng-click="resultClicked(result)">
-					</a>
-				</div>
-				<div class="item">
-					<div class="row">
-						<div class="col-75 col-wrap">
-							<a ui-sref="attraction({attraction_id: result.id})" ng-click="resultClicked(result)">{{result.title}}</a>
+			<!-- display results in columns -->
+			<div class="row">
+				<div class="col" ng-class="columnClasses()" ng-repeat="column in columns()" >
+					<div class="card" ng-repeat="result in getColumn(feed.results, column)" ng-show="feed.results.length > 0">
+						<div class="item item-image">
+							<a>
+								<img ng-src="{{result.src}}" ui-sref="attraction({attraction_id: result.id})" ng-click="resultClicked(result)">
+							</a>
 						</div>
-						<div class="col-25 right col-wrap">
-							<span class="ion-heart heart" ng-class="{'heart-selected': result.picked}" ng-click="resultPicked(result)">
-								<span ng-show="attractionIsPicked(result.id)" class="heart-selected">
-									Picked
-								</span>
-								<span ng-show="!attractionIsPicked(result.id)">
-									Pick
-								</span>
-							</span>
+						<div class="item">
+							<div class="row">
+								<div class="col-75 col-wrap">
+									<a ui-sref="attraction({attraction_id: result.id})" ng-click="resultClicked(result)" class="item-title">{{result.title}}</a>
+								</div>
+								<div class="col-25 right col-wrap">
+									<span ng-click="resultPicked(result)">
+										<span class="ion-heart heart heart-selected" ng-show="attractionIsPicked(result.id)" class="heart-selected"></span>
+										<span class="ion-heart heart" ng-show="!attractionIsPicked(result.id)"></span>
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

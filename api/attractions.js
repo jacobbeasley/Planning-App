@@ -45,7 +45,7 @@ module.exports = {
  	 	 	 	 	params.start = req.body.start; 
  	 	 	 	}
                 console.log(req.body.start);
- 	 	 	 	params.per_page = 10; 
+ 	 	 	 	params.per_page = 24; 
  	 	 	 	
  	 	 	 	// execute sql and return results
  	 	 	 	app.db.q(sql_tables + sql_group_by + sql_order_by, params).success(function(results) {

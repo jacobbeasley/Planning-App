@@ -9,11 +9,11 @@
 					{{attraction.title}}
 				</div>
 				<div class="col-25 right">
-					<span class="ion-heart heart" ng-class="{'heart-selected': attraction.picked}" ng-click="attractionPicked(attraction)">
-						<span ng-show="attractionIsPicked(attraction.id)" class="heart-selected">
+					<span ng-click="attractionPicked(attraction)">
+						<span ng-show="attractionIsPicked(attraction.id)" class="ion-heart heart heart-selected">
 							Picked
 						</span>
-						<span ng-show="!attractionIsPicked(attraction.id)">
+						<span ng-show="!attractionIsPicked(attraction.id)" class="ion-heart heart">
 							Pick
 						</span>
 					</span>
