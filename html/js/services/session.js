@@ -1,13 +1,14 @@
 
 // 
 // session service
-tripperApp.factory("session", function(localStorageService, $state) {
+tripperApp.factory("session", function(localStorageService, $state, api, $rootScope) {
   var sess = {
     user: {
       filters: {}, // default to no filters
     }, 
     picks: []
   };
+  $rootScope.session = sess; // so that it can accessed all over the place...
 
   sess.load = function() {
     // load from local storage
@@ -21,20 +22,73 @@ tripperApp.factory("session", function(localStorageService, $state) {
 
     // @TODO - sync over internet
     if (sess.loggedIn()) {
-      
+      sess.loadPicks();
     }
   };
 
-  sess.save = function() {
+  sess.save = function(justLoggedIn) {
+    if (typeof(justLoggedIn) == "undefined") {
+      justLoggedIn = false; 
+    }
+
     // save to local storage
     localStorageService.set("user", sess.user);
     localStorageService.set("picks", sess.picks);
 
     // @TODO - sync over internet
     if (sess.loggedIn()) {
-
+      if (justLoggedIn) {
+        // don't delete anything - just append
+        sess.appendPicks(); // push up anything they had selected prior to logging in
+      } else {
+        // push up our list of picks
+        sess.savePicks();
+      }
     }
   };
+
+  sess.savePicks = function() {
+    // save picks to server
+    api.post("picks/save", {
+      "picks": sess.picks
+    })
+    .success(function(data, status, headers, config) {
+      // @TODO - not really anything to do, I think...
+
+    })
+    .error(function(data, status, headers, config) {
+      // @TODO - gracefully handle error
+    });
+  }
+
+  sess.appendPicks = function() {
+    // append picks to server's copy of picks. after appending, it should return the actual pics
+    api.post("picks/append", {
+      "picks": sess.picks
+    })
+    .success(function(data, status, headers, config) {
+      if (data.isArray()) {
+        sess.picks = data;   
+      }   
+    })
+    .error(function(data, status, headers, config) {
+      // @TODO - gracefully handle error
+    });
+  }
+
+  sess.loadPicks = function() {
+    // load picks from server
+    if (sess.loggedIn()) {
+      api.get("picks/load/" + sess.user.token.user_id).success(function(data, status, headers, config) {
+        if (typeof(data) == "object") {
+          sess.picks = data;
+        }
+      })
+      .error(function(data, status, headers, config) {
+        // @TODO - gracefully handle error
+      });
+    }
+  }
 
   sess.loggedIn = function() {
     // return whether user is logged in
@@ -63,7 +117,7 @@ tripperApp.factory("session", function(localStorageService, $state) {
 
   sess.login = function(token) {
     sess.user.token = token;
-    sess.save();
+    sess.save(true);
   }
 
   sess.logout = function() {
@@ -71,7 +125,9 @@ tripperApp.factory("session", function(localStorageService, $state) {
     sess.user = {
       filters: {}, // default to no filters
     };
-    //sess.picks = [];
+
+    // clear local pic save
+    sess.picks = [];
 
     // save changes 
     sess.save();
