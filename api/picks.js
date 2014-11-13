@@ -15,29 +15,47 @@ module.exports = {
 function appendPicks(req, res) {
 	// save if token validates
 	if (app.lib.validateToken(req.body.sess_user.token)) {
-		// insert all the picks
-		var picksDone = 0; // track how many queries are still executing 
-		for (var i = 0; i < picks.length; i++) {
-			try {
-				app.db.q("REPLACE INTO wishlist (user_id, attraction_id) VALUES(:user_id, :attraction_id)", {
-					user_id: req.body.sess_user.token.user_id,
-					attraction_id: picks[i]
-				}).success(function() {
-					picksDone++; 
+		try {
+			// insert all the picks
+			var picks = req.body.picks;
+			var picksDone = 0; // track how many queries are still executing 
 
-					if (picksDone == picks.length) {
-						// when done, load for this user
-						loadPicksForUser(res, req.body.sess_user.token.user_id);
+			if (picks.length > 0) {
+				for (var i = 0; i < picks.length; i++) {
+					try {
+						app.db.q("REPLACE INTO wishlist (user_id, attraction_id) VALUES(:user_id, :attraction_id)", {
+							user_id: req.body.sess_user.token.user_id,
+							attraction_id: picks[i]
+						}).success(function() {
+							picksDone++; 
+
+							if (picksDone == picks.length) {
+								// when done, load for this user
+								returnPicksForUser(res, req.body.sess_user.token.user_id);
+							}
+						});
+					} catch (err) {
+						console.log("error adding pick: " + err);
+						picksDone++; // skip this pick
 					}
-				});
+				}
+			} else {
+				// nothing to save. just load. 
+				returnPicksForUser(res, req.body.sess_user.token.user_id);
+			}
+		} catch (err) {
+			console.log("problem saving picks");
+			console.log(err);
+			try {
+				returnPicksForUser(res, req.body.sess_user.token.user_id);
 			} catch (err) {
-				console.log("error adding pick: " + err);
-				picksDone++; // skip this pick
+				// @TODO - handle better
+				res.json("fail");
 			}
 		}
 	} else {
 		// just load
-		loadPicksForUser(res, req.body.sess_user.token.user_id);
+		returnPicksForUser(res, req.body.sess_user.token.user_id);
 	} 
 }
 

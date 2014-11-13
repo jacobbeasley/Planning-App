@@ -23,6 +23,7 @@ tripperApp.factory("session", function(localStorageService, $state, api, $rootSc
     // @TODO - sync over internet
     if (sess.loggedIn()) {
       sess.loadPicks();
+      sess.loadFilters();
     }
   };
 
@@ -43,6 +44,7 @@ tripperApp.factory("session", function(localStorageService, $state, api, $rootSc
       } else {
         // push up our list of picks
         sess.savePicks();
+        sess.saveFilters();
       }
     }
   };
@@ -67,7 +69,7 @@ tripperApp.factory("session", function(localStorageService, $state, api, $rootSc
       "picks": sess.picks
     })
     .success(function(data, status, headers, config) {
-      if (data.isArray()) {
+      if (typeof(data) == "object") {
         sess.picks = data;   
       }   
     })
@@ -86,6 +88,33 @@ tripperApp.factory("session", function(localStorageService, $state, api, $rootSc
       })
       .error(function(data, status, headers, config) {
         // @TODO - gracefully handle error
+      });
+    }
+  }
+
+  sess.saveFilters = function() {
+    if (sess.loggedIn()) {
+      api.post("filters/save").success(function(data, status, headers, config) {
+        // successfully saved
+
+      })
+      .error(function(data, status, headers, config) {
+        // @TODO - gracefully handle errors
+
+      });
+    }
+  }
+
+  sess.loadFilters = function() {
+    if (sess.loggedIn()) {
+      api.post("filters/load").success(function(data, status, headers, config) {
+        if (typeof(data) == "object") {
+          sess.user.filters = data;
+        }
+      })
+      .error(function(data, status, headers, config) {
+        // @TODO - gracefully handle errors
+
       });
     }
   }

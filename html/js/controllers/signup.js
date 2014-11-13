@@ -24,6 +24,7 @@ tripperApp.controller("signupCtrl", function($scope, session, api, $ionicPopup, 
       	session.login(data.token);
         
         // redirect to wish list with success message
+        $rootScope.clearAttractions();
       	$state.go("wishlist");
       	$ionicPopup.alert({
       	  title: "Success!",

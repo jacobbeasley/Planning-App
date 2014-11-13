@@ -1,6 +1,6 @@
 // 
 // login controller
-tripperApp.controller("loginCtrl", function($scope, session, api, $state, $ionicPopup) {
+tripperApp.controller("loginCtrl", function($scope, $rootScope, session, api, $state, $ionicPopup) {
   // initialize form
   if (typeof($scope.form) == "undefined") {
     $scope.form = {
@@ -22,6 +22,7 @@ tripperApp.controller("loginCtrl", function($scope, session, api, $state, $ionic
       	session.login(data.token);
         
         // redirect to wish list with success message
+        $rootScope.clearAttractions();
       	$state.go("wishlist");
       }
 
