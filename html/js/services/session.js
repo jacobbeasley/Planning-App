@@ -1,7 +1,7 @@
 
 // 
 // session service
-tripperApp.factory("session", function(localStorageService, $state, api, $rootScope) {
+tripperApp.factory("session", function(localStorageService, $state, api, $rootScope, analytics) {
   var sess = {
     user: {
       filters: {}, // default to no filters
@@ -133,6 +133,8 @@ tripperApp.factory("session", function(localStorageService, $state, api, $rootSc
       sess.picks.unshift(attraction_id);
     }
 
+    analytics.event("place-picked");
+
     sess.save();
   }
 
@@ -141,11 +143,14 @@ tripperApp.factory("session", function(localStorageService, $state, api, $rootSc
       sess.picks.splice(sess.picks.indexOf(attraction_id), 1);
     }
 
+    analytics.event("place-unpicked");
+
     sess.save();
   }
 
   sess.login = function(token) {
     sess.user.token = token;
+    analytics.event("logged-in");
     sess.save(true);
   }
 
@@ -162,11 +167,9 @@ tripperApp.factory("session", function(localStorageService, $state, api, $rootSc
     sess.save();
 
     // redirect
+    analytics.event("logged-out");
     $state.go("login");
   }
-
-  // setup local storage
-  //localStorageService.
 
   // load it from local storage when app boots up
   sess.load(); 

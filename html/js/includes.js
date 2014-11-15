@@ -42,6 +42,10 @@ var includes = [
     "type": "js",
     "url": "js/services/feed.js"
   },
+  {
+    "type": "js",
+    "url": "js/services/analytics.js"
+  },
 
 
   // controllers
@@ -78,8 +82,8 @@ var includes = [
 // generate includes
 includes.forEach(function(include) {
 if (include.type == "css") {
-  document.write("<link rel='stylesheet' type='text/css' href='" + include.url + "'>");
+  document.write("<link rel='stylesheet' type='text/css' href='" + include.url + "?" + Math.random() + "'>");
 } else if (include.type == "js") {
-  document.write("<script src='" + include.url + "'></scri" + "pt>");
+  document.write("<script src='" + include.url + "?" + Math.random() + "'></scri" + "pt>");
 }
 });

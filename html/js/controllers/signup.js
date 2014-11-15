@@ -1,6 +1,6 @@
 // 
 // signup controller
-tripperApp.controller("signupCtrl", function($scope, session, api, $ionicPopup, $state) {
+tripperApp.controller("signupCtrl", function($rootScope, $scope, session, api, $ionicPopup, $state, analytics) {
   // initialize form
   if (typeof($scope.form) == "undefined") {
     $scope.form = {
@@ -30,6 +30,8 @@ tripperApp.controller("signupCtrl", function($scope, session, api, $ionicPopup, 
       	  title: "Success!",
       	  template: "An email has been sent to " + $scope.form.email + " to confirm your email address and set a password. "
       	});
+
+        analytics.event("signed-up");
       }
 
       // if unsuccessful, display error to user
