@@ -18,6 +18,17 @@ module.exports = {
 		password: "password"
 	},
 
+	// email settings
+	email: {
+		from_email: "noreply@tripping.jacobbeasley.com",
+		smtp: {
+			host: "",
+			port: "",
+			username: "",
+			password: ""
+		}
+	},
+
 	// salt (used for hashing passwords and such)
 	salt: "3094sjdlkr23j4rsdflkj4tpijghsljkhjsd"
 };

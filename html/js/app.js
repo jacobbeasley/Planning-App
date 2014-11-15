@@ -46,3 +46,17 @@ tripperApp.config(function($stateProvider, $urlRouterProvider) {
       controller: "attractionCtrl"
     });
 });
+
+// google analytics
+tripperApp.run(['$rootScope', '$location', '$window', function($rootScope, $location, $window){
+  $rootScope.$on('$stateChangeSuccess', function(event){
+    if (!$window.ga)
+      return;
+    
+    try {
+      $window.ga('send', 'pageview', { page: $location.path() });
+    } catch (err) {
+      console.log("Google analytics error: " + err);
+    }
+  }); 
+}]);
