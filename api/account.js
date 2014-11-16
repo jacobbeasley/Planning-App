@@ -7,7 +7,7 @@ module.exports = {
 	init: function(app) {
 		// standard shared app function 
 		app.lib.hash = function(key, value) {
-			var shasum = crypto.createHash('sha1');
+			var shasum = crypto.createHash('md5');
 			shasum.update(conf.salt + ":" + key + ":" + value, "utf8");
 			return shasum.digest("utf8");
 		};
@@ -40,6 +40,11 @@ module.exports = {
 				user_id: user_id,
 				hash: app.lib.hash("userToken", user_id)
 			}
+		}
+
+		// generate password reset code
+		app.lib.genPasswordResetCode = function() {
+			return app.lib.hash("password_reset_code", Math.random());
 		}
 
 		// signup a user
@@ -85,12 +90,15 @@ module.exports = {
 
                         // VALID! Create User Account. 
                         try {
-                        	// query db
-                        	app.db.q("INSERT INTO user (email, firstname, lastname) VALUES (:email, :firstname, :lastname)", {
+                        	// create user in db
+                        	var params = {
                         		firstname: req.body.firstname,
                         		lastname: req.body.lastname,
-                        		email: req.body.email
-                        	})
+                        		email: req.body.email,
+                        		password_reset_code: app.lib.genPasswordResetCode()
+                        	};
+
+                        	app.db.q("INSERT INTO user (email, firstname, lastname, password_reset_code) VALUES (:email, :firstname, :lastname, :password_reset_code)", params)
                         	.success(function(result) {
                         		// get user's id
                         		app.db.q("SELECT id FROM user WHERE email=:email", {
@@ -98,10 +106,16 @@ module.exports = {
 								})
 			                    .success(function(result) {
 			                    	if (result.length == 1) {
+			                    		var user_id = result[0].id;
+
+			                    		// send welcome email with password reset link
+			                    		params.user_id = user_id; 
+			                    		app.lib.mailer.sendToUser(user_id, "welcome", params);
+
 			                    		// we're done
 			                    		res.json({
 		                        			success: true,
-		                        			token: app.lib.genToken(result[0].id)
+		                        			token: app.lib.genToken(user_id)
 		                        		});
 			                    	} else {
 			                    		// error
@@ -160,6 +174,21 @@ module.exports = {
 					error: String(err)
 				})
 			}
+		});
+
+		// send an email to reset password
+		app.post("/api/send-reset-password", function (req, res) {
+			// get user with this email
+			
+
+			// change password reset code
+
+
+			// send email
+			
+
+			// output response
+			
 		});
 
 		// reset a password

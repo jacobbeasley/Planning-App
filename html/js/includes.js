@@ -6,7 +6,7 @@ var includes = [
   },
   {
     "type": "css",
-    "url": "css/splash.css"
+    "url": "css/app.css"
   },
 
   // JS LIBRARIES

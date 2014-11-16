@@ -18,15 +18,13 @@ module.exports = {
 		password: "password"
 	},
 
-	// email settings
+	// email settings - see https://github.com/andris9/Nodemailer
 	email: {
-		from_email: "noreply@tripping.jacobbeasley.com",
-		smtp: {
-			host: "",
-			port: "",
-			username: "",
-			password: ""
-		}
+		from: "noreply@quovadeez.com",
+		transporter: require('nodemailer-ses-transport')({
+		    accessKeyId: 'AWSACCESSKEY',
+		    secretAccessKey: 'AWS/Secret/key'
+		})
 	},
 
 	// salt (used for hashing passwords and such)

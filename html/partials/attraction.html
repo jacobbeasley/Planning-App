@@ -3,24 +3,16 @@
 		<div class="buttons">
 		    <button ion-nav-back-button class="button ion-arrow-left-c button-light" style="font-size: 22px" ng-click="goBack()"></button>
 		</div>
-		<h1 class="title" ng-show="loaded == true || partialLoad == true">
-			<div class="row">
-				<div class="col-75 col-wrap">
-					{{attraction.title}}
-				</div>
-				<div class="col-25 right">
-					<span ng-click="attractionPicked(attraction)">
-						<span ng-show="attractionIsPicked(attraction.id)" class="ion-heart heart heart-selected">
-							Picked
-						</span>
-						<span ng-show="!attractionIsPicked(attraction.id)" class="ion-heart heart">
-							Pick
-						</span>
-					</span>
-				</div>
-			</div>
+		<h1 class="title" ng-show="loaded == true || partialLoad == true" style="right: 0px">
+			{{attraction.title}}
 		</h1>
 		<h1 class="title" ng-show="loaded == false && partialLoad == false">Loading...</h1>
+		<div class="buttons">
+			<span ng-click="attractionPicked(attraction)">
+				<span ng-show="attractionIsPicked(attraction.id)" class="ion-heart heart heart-selected">&nbsp;Picked</span>
+				<span ng-show="!attractionIsPicked(attraction.id)" class="ion-heart heart">&nbsp;Pick</span>
+			</span>
+		</div>
 	</ion-header-bar>
 	<ion-content class="padding attraction-page">
 		<!-- display attraction -->

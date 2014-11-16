@@ -20,10 +20,6 @@
   font-size: 36px;
 }
 
-.attraction-page .star {
-  font-size: 24px;
-}
-
 .star-selected {
   color: darkorange;
 }
@@ -104,3 +100,18 @@ ion-content {
   padding-top: 0px; padding-bottom: 0px;
 }
 
+.attraction-page .star {
+  font-size: 24px;
+}
+
+.attraction-page .heart {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.attraction-page .heart-selected {
+  color: #FFF;
+}
+.attraction-page .heart-selected:before {
+  color: #FF4073;
+}

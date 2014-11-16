@@ -25,7 +25,7 @@ tripperApp.controller("signupCtrl", function($rootScope, $scope, session, api, $
         
         // redirect to wish list with success message
         $rootScope.clearAttractions();
-      	$state.go("wishlist");
+      	$state.go("feed");
       	$ionicPopup.alert({
       	  title: "Success!",
       	  template: "An email has been sent to " + $scope.form.email + " to confirm your email address and set a password. "
