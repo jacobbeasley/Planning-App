@@ -76,6 +76,10 @@ var includes = [
   {
     "type": "js",
     "url": "js/controllers/wishlist.js"
+  },
+  {
+    "type": "js",
+    "url": "js/controllers/reset-password.js"
   }
 ];
 

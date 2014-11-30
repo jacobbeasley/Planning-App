@@ -1,9 +1,11 @@
 module.exports = {
 	// listen port
-	listen_port: 3000,
+	listen_port: 80,
 
 	// http settings
 	http: true,
+	html_webroot: "http://www.quovadeez.com/html",
+	sitename: "Quo Vadeez",
 	
 	// api settings
 	api: true,
@@ -15,15 +17,21 @@ module.exports = {
 		host: "127.0.0.1",
 		port: "3306",
 		username: "root",
-		password: "password"
+//		password: "password"
+		password: ""
 	},
 
 	// email settings - see https://github.com/andris9/Nodemailer
 	email: {
 		from: "noreply@quovadeez.com",
-		transporter: require('nodemailer-ses-transport')({
-		    accessKeyId: 'AWSACCESSKEY',
-		    secretAccessKey: 'AWS/Secret/key'
+		transporter: require("nodemailer-smtp-transport")({
+			port: 465,
+			host: "r1-chicago.webserversystems.com",
+			secure: true,
+			auth: {
+				user: "noreply@quovadeez.com",
+				pass: "ppF@r0BV)Th5"
+			}
 		})
 	},
 

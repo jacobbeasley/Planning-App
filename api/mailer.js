@@ -8,11 +8,14 @@ module.exports = {
 		var transporter = nodemailer.createTransport(conf.email.transporter);
 
 		app.lib.mailer = {
-			send: function(toAddresses, subject, template, params, callback) {
+			send: function(toAddresses, template, params, callback) {
 				try {
 					if (typeof(params) == "undefined") {
 						params = {}; // default to empty params
 					}
+
+					// some built-in params
+					params.conf = conf; 
 
 					// build email object
 					var mailOptions = {
@@ -21,7 +24,7 @@ module.exports = {
 					};
 
 					// parse text template (applying params)
-					mailOptions.html = swig.renderFile("./templates/email/" + template + ".html.twig", params);
+					mailOptions.text = swig.renderFile("./templates/email/" + template + ".txt.twig", params); 
 
 					// parse html template (applying params)
 					mailOptions.html = swig.renderFile("./templates/email/" + template + ".html.twig", params);
@@ -52,10 +55,10 @@ module.exports = {
 				}
 			},
 
-			sendToUser: function(user_id, subject, emailTemplate, params, callback) {
+			sendToUser: function(user_id, emailTemplate, params, callback) {
 				// get user id then send email
 				try {
-					app.db.q("SELECT email WHERE user_id=:user_id", {
+					app.db.q("SELECT email from user WHERE id=:user_id", {
 			        	user_id: user_id
 			        })
 			        .success(function(result) {

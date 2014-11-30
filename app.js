@@ -5,13 +5,16 @@
 // setup app
 var express = require('express');
 var app = express();
-app.lib = {}; 
 
+// import libs
+app.lib = {}; 
 app.use(require("body-parser").json());
+
+// get db setup and configured
 var conf = require("./conf");
 app.db = require("./db"); 
 
-// setup API
+// setup API (if enabled for this server)
 if (conf.api) {
 	// include each API modules (NOTE: Each module MUST declare an init(app) function)
 	var fs = require("fs");
@@ -22,7 +25,7 @@ if (conf.api) {
 	}
 }
 
-// will serve http content
+// will serve http content (if enabled for this server)
 if (conf.http) {
 	// forward to HTML if they go to root
 	app.get("/", function(req, res) {

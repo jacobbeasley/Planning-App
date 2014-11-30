@@ -23,7 +23,7 @@ tripperApp.controller("loginCtrl", function($scope, $rootScope, session, api, $s
         
         // redirect to wish list with success message
         $rootScope.clearAttractions();
-      	$state.go("wishlist");
+      	$state.go("feed");
       }
 
       // if unsuccessful, display error to user

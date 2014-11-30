@@ -9,7 +9,7 @@ module.exports = {
 		app.lib.hash = function(key, value) {
 			var shasum = crypto.createHash('md5');
 			shasum.update(conf.salt + ":" + key + ":" + value, "utf8");
-			return shasum.digest("utf8");
+			return shasum.digest("hex");
 		};
 
 		// standard, re-usable app component to validate a user's login token 
@@ -81,7 +81,7 @@ module.exports = {
 					})
                     .success(function(result) {
                         if (result.length > 0) {
-                        	// email alread yin use
+                        	// email already in use
                         	res.json({
                         		success: false,
                         		error: "Email already in use"
@@ -151,7 +151,7 @@ module.exports = {
 			try {
 				// query database to see if its a valid username/password
 				//app.db.q("SELECT id FROM user WHERE email=:email AND password = :password", {
-				app.db.q("SELECT id FROM user WHERE email=:email", {
+				app.db.q("SELECT id FROM user WHERE email=:email AND password=:password", {
 						email: req.body.email,
 						password: app.lib.hash("password", req.body.password)
 					})
@@ -179,28 +179,84 @@ module.exports = {
 		// send an email to reset password
 		app.post("/api/send-reset-password", function (req, res) {
 			// get user with this email
-			
-
-			// change password reset code
-
-
-			// send email
-			
-
-			// output response
-			
+			app.db.q("SELECT id, firstname FROM user WHERE email=:email", {
+				email: req.body.email
+			}).success(function(results) {
+				if (results.length == 0) {
+					res.json({
+						success: false,
+						error: "No user exists with that email address. "
+					});
+				} else {
+					// change password reset code
+					var newCode = app.lib.genPasswordResetCode(); 
+					app.db.q("UPDATE user SET password_reset_code=:code WHERE id=:id", {
+						"id": results[0].id,
+						"code": newCode
+					}).success(function() {
+						// send email
+						app.lib.mailer.send(req.body.email, "reset-password", {
+							firstname: results[0].firstname,
+							user_id: results[0].id,
+							password_reset_code: newCode
+						}, function(success) {
+							if (success) {
+								res.json({
+									success: true
+								});
+							} else {
+								res.json({
+									success: false,
+									error: "Failed to send email"
+								});
+							}
+						});
+					});
+				}
+			});
 		});
 
 		// reset a password
-		app.post("/api/reset-password", function (req, res) {
-			// validate reset token
+		app.post("/api/set-password", function (req, res) {
+			try {
+				// make sure password is valid
+				var password = req.body.password.trim();
+				if (password == "") {
+					res.json({
+						success: false,
+						error: "A password is required. "
+					});
+					return;
+				}
 
-
-			// validate data
-
-
-			// reset password
-
+				// validate reset token
+				app.db.q("SELECT id FROM user where id=:id AND password_reset_code <> '' AND password_reset_code=:password_reset_code", {
+					id: req.body.user_id,
+					password_reset_code: req.body.password_reset_hash
+				}).success(function(results) {
+					if (results.length == 0) {
+						res.json({
+							success: false,
+							error: "Invalid password reset token. Please try resetting your password again. "
+						});
+					} else {
+						// valid password reset token. Set the password. 
+						app.db.q("UPDATE user SET password=:password, password_reset_code='', email_verified=1 WHERE id=:id", {
+							id: req.body.user_id,
+							password: app.lib.hash("password", password)
+						}).success(function() {
+							res.json({
+								success: true
+							});
+						})
+					}
+				});
+			} catch (err) {
+				res.json({
+					success: false,
+					error: err.toString()
+				});
+			}
 		});
 	}
 };
