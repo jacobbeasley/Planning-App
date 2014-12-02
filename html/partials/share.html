@@ -1,0 +1,21 @@
+<ion-view>
+	<ion-header-bar  class="bar bar-positive" align-title="center">
+		<div class="buttons">
+		    <button ion-nav-back-button class="button ion-arrow-left-c button-light" style="font-size: 22px" ng-click="goBack()">
+		</div>
+		<h1 class="title">Share <span ng-show="typeof(sharePageTitle) != 'undefined'">{{sharePageTitle}}</span></h1>
+	</ion-header-bar>
+	<ion-content class="padding share-page">
+		<div class="center">Copy and Paste to share: </div>
+		<input type='text' class="center" ng-value="sharePageUrl" onclick="this.select()" onfocus="this.select()" />
+
+		<br />
+		<div class="center mtl">Or share with one of these services...</div>
+		<div class="center">
+			<a class="button button-positive ion-social-facebook" ng-href="{{genLink('facebook')}}" target="_blank"></a>
+			<a class="button button-positive ion-social-twitter" ng-href="{{genLink('twitter')}}" target="_blank"></a>
+			<!--<a class="button button-positive ion-social-pinterest" ng-href="{{genLink('pinterest')}}" target="_blank"></a>-->
+			<a class="button button-positive ion-email" ng-href="{{genLink('email')}}" target="_blank"></a>
+		</div>
+	</ion-content>
+</ion-view>

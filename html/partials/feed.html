@@ -4,7 +4,14 @@
 		    <button class="button ion-navicon-round button-light" ng-click="toggleLeftMenu(); " style="font-size: 22px"></button>
 		</div>
 		<h1 class="title" ng-show="wishlist==false">New York Attractions</h1>
-		<h1 class="title" ng-show="wishlist==true">Your Wish List</h1>
+		<h1 class="title" ng-show="wishlist==true">
+			<span ng-show="feed.user.name == 'Your'">Your</span>
+			<span ng-show="feed.user.name != 'Your'">{{feed.user.name}}'s</span>
+			Wish List
+		</h1>
+		<div class="buttons" ng-show="wishlist==true">
+			<button class="button ion-android-share button-light" style="font-size: 22px" ng-click="sharePage();"></button>
+		</div>
 	</ion-header-bar>
 	<ion-content class="padding feed-page" delegate-handle="feedScroll">
 		<ion-list>

@@ -45,6 +45,16 @@ tripperApp.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: "partials/feed.html",
       controller: "wishlistCtrl"
     })
+    .state("specificwishlist", {
+      url: "/wishlist/:user_id",
+      templateUrl: "partials/feed.html",
+      controller: "wishlistCtrl"
+    })
+    .state("share", {
+      url: "/share",
+      templateUrl: "partials/share.html",
+      controller: "shareCtrl"
+    })
     .state("attraction", {
       url: "/attraction/:attraction_id",
       templateUrl: "partials/attraction.html",

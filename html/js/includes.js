@@ -80,14 +80,18 @@ var includes = [
   {
     "type": "js",
     "url": "js/controllers/reset-password.js"
+  },
+  {
+    "type": "js",
+    "url": "js/controllers/share.js"
   }
 ];
 
 // generate includes
 includes.forEach(function(include) {
-if (include.type == "css") {
-  document.write("<link rel='stylesheet' type='text/css' href='" + include.url + "?" + Math.random() + "'>");
-} else if (include.type == "js") {
-  document.write("<script src='" + include.url + "?" + Math.random() + "'></scri" + "pt>");
-}
+  if (include.type == "css") {
+    document.write("<link rel='stylesheet' type='text/css' href='" + include.url + "?" + Math.random() + "'>");
+  } else if (include.type == "js") {
+    document.write("<script src='" + include.url + "?" + Math.random() + "'></scri" + "pt>");
+  }
 });

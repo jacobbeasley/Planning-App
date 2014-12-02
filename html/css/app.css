@@ -112,6 +112,16 @@ ion-content {
 .attraction-page .heart-selected {
   color: #FFF;
 }
+
 .attraction-page .heart-selected:before {
   color: #FF4073;
+}
+
+.attraction-page .sharebutton {
+  margin-left: 10px;
+}
+
+/* share page */
+.share-page .button {
+  font-size: 30px;
 }

@@ -45,6 +45,14 @@ tripperApp.controller("attractionCtrl", function($scope, $rootScope, $ionicSideM
     return session.picks.indexOf(attraction_id) != -1;
   };
 
+  // share
+  $scope.sharePage = function() {
+    $rootScope.sharePageUrl = document.URL; 
+    $rootScope.sharePageTitle = $scope.attraction.title;
+    
+    $state.go("share");
+  }
+
   // load full attraction - @TODO AJAX CALL
   $scope.loadAttraction = function(attraction_id) {
     api.get("attraction/" + attraction_id).success(function(data, status, headers, config) {
