@@ -88,5 +88,10 @@ tripperApp.factory("feedService", ["$rootScope", "api", function($rootScope, api
     };
   }
 
+  // generate thumbnail of a url
+  $rootScope.thumb = function(filename) {
+    return filename + ".thumb.jpeg";
+  }
+
   return feedService; 
 }]);
