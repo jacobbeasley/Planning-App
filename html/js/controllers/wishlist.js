@@ -29,6 +29,11 @@ tripperApp.controller("wishlistCtrl", function($scope, $rootScope, session, feed
   // tell feed template that this is NOT for a wish
   $scope.wishlist = true; 
 
+  // determine whether or not to display share button
+  $scope.displayShare = function() {
+    return true; // can share
+  }
+
   // query and display results
   $scope.loadResults = function() {
     if (typeof($stateParams.user_id) == "undefined" || $stateParams.user_id == session.user.token.user_id) {
@@ -46,7 +51,7 @@ tripperApp.controller("wishlistCtrl", function($scope, $rootScope, session, feed
       // set user info
       $scope.feed.user = {
         name: "Your",
-        user_id: (typeof(session.user.token.user_id) != "undefined") ? session.user.token.user_id : 0
+        user_id: (session.loggedIn()) ? session.user.token.user_id : 0
       };
     } else {
       // load someone else's wishlist
@@ -113,13 +118,19 @@ tripperApp.controller("wishlistCtrl", function($scope, $rootScope, session, feed
 
   // share button
   $scope.sharePage = function() {
-    $rootScope.sharePageUrl = document.URL; 
-    if ($scope.feed.user.name == "Your" || $scope.feed.user == "") {
-      $rootScope.sharePageTitle = "My Wish List";
+    if (typeof($stateParams.user_id) == "undefined") {
+      // CANNOT share without signing up
+      $state.go("signup"); 
     } else {
-      $rootScope.sharePageTitle = $scope.feed.user.name + "'s Wish List";
+      // CAN share
+      $rootScope.sharePageUrl = document.URL; 
+      if (typeo($scope.feed.user) == "undefined" || $scope.feed.user.name == "Your" || $scope.feed.user == "") {
+        $rootScope.sharePageTitle = "My Wish List";
+      } else {
+        $rootScope.sharePageTitle = $scope.feed.user.name + "'s Wish List";
+      }
+      
+      $state.go("share");
     }
-    
-    $state.go("share");
   }
 });

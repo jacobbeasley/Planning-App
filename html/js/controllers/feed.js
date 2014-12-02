@@ -20,6 +20,11 @@ tripperApp.controller("feedCtrl", function($scope, $rootScope, session, feedServ
   // tell feed template that this is NOT for a wish
   $scope.wishlist = false; 
 
+  // don't display share button on feed
+  $scope.displayShare = function() {
+    return false; 
+  }
+
   // query and display results
   $scope.loadResults = function() { 
     feedService.runSearch($rootScope.feed, session, function(success) {
